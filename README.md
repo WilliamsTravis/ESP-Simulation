@@ -1,6 +1,6 @@
 # ESP_Simulation
 
-Snow melt forecasting and agriculture – Brainstorm &amp; Analyze Data
+Ensemble Streamflow Prediction Simulation – Brainstorm &amp; Analyze Data
 
 The Colorado Basin River Forecast Center generates forecasts of streamflow from snow melt in
 Western Colorado. These predictions are used by reservoir managers in the Colorado Basin to

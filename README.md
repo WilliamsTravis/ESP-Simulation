@@ -1,7 +1,7 @@
 # ESP_Simulation
 
 Snow melt forecasting and agriculture – Brainstorm &amp; Analyze Data
-Session Lead: Travis Williams
+
 The Colorado Basin River Forecast Center generates forecasts of streamflow from snow melt in
 Western Colorado. These predictions are used by reservoir managers in the Colorado Basin to
 decide on appropriate allocations to water users. Many crop producers in the area are particularly

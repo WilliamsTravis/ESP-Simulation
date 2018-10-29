@@ -9,7 +9,7 @@ import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
-from flask_cache import Cache
+from flask_caching import Cache
 import glob
 import json
 import numpy as np
@@ -54,7 +54,8 @@ layout = dict(
     legend=dict(font=dict(size=10), orientation='h'))
 
 # In[] Get data -2 sets
-data_dir = os.path.join("..", "data")
+#data_dir = os.path.join("..", "data")
+data_dir = 'data'
 files = glob.glob(os.path.join(data_dir, "*"))
 files = [f for f in files if "historical" not in f]
 dolc_hist = pd.read_csv(os.path.join(data_dir, "DOLC2_historical.csv"))                      # use os.path.join() and ".." instead of "data\\"
@@ -194,7 +195,7 @@ def makeGraph(year, site_choice):
         y=650,
         font=dict(size = 17),
         showarrow=False)
-    
+
     data = [dict(type='line',
                  line=dict(color='#8ad88d',
                            width=2,
@@ -553,7 +554,7 @@ def displaySD2(sd):
 
 
 
-# In[] 
+# In[]
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(host='0.0.0.0')

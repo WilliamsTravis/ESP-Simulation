@@ -17,7 +17,7 @@ import os
 import pandas as pd
 import random
 import scipy
-os.chdir("c:\\users\\user\\github\\ESP_simulation")
+
 # In[] Set up application and server
 app = dash.Dash(__name__)
 
@@ -54,10 +54,11 @@ layout = dict(
     legend=dict(font=dict(size=10), orientation='h'))
 
 # In[] Get data -2 sets
-files = glob.glob("data\\*")
+data_dir = os.path.join("..", "data")
+files = glob.glob(os.path.join(data_dir, "*"))
 files = [f for f in files if "historical" not in f]
-dolc_hist = pd.read_csv("data\\DOLC2_historical.csv")
-mphc_hist = pd.read_csv("data\\MPHC2_historical.csv")
+dolc_hist = pd.read_csv(os.path.join(data_dir, "DOLC2_historical.csv"))                      # use os.path.join() and ".." instead of "data\\"
+mphc_hist = pd.read_csv(os.path.join(data_dir, "MPHC2_historical.csv"))
 
 dolc_files = [f for f in files if "DOLC2" in f]
 mphc_files = [f for f in files if "MPHC2" in f]

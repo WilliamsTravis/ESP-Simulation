@@ -4,12 +4,12 @@ Visualize the ensemble streamflow predictions
 
 @author: Travis Williams
 """
+from sys import platform
 import copy
 import dash
 from dash.dependencies import Input, Output, State
 import dash_core_components as dcc
 import dash_html_components as html
-from flask_cache import Cache
 import glob
 import json
 import numpy as np
@@ -17,6 +17,12 @@ import os
 import pandas as pd
 import random
 import scipy
+
+if platform == 'win32':
+    from flask_cache import Cache
+else:
+    from flask_caching import Cache
+
 
 # In[] Set up application and server
 app = dash.Dash(__name__)
@@ -54,11 +60,10 @@ layout = dict(
     legend=dict(font=dict(size=10), orientation='h'))
 
 # In[] Get data -2 sets
-data_dir = os.path.join("..", "data")
-files = glob.glob(os.path.join(data_dir, "*"))
+files = glob.glob(os.path.join('data', "*"))
 files = [f for f in files if "historical" not in f]
-dolc_hist = pd.read_csv(os.path.join(data_dir, "DOLC2_historical.csv"))                      # use os.path.join() and ".." instead of "data\\"
-mphc_hist = pd.read_csv(os.path.join(data_dir, "MPHC2_historical.csv"))
+dolc_hist = pd.read_csv(os.path.join('data', "DOLC2_historical.csv"))                      # use os.path.join() and ".." instead of "data\\"
+mphc_hist = pd.read_csv(os.path.join('data', "MPHC2_historical.csv"))
 
 dolc_files = [f for f in files if "DOLC2" in f]
 mphc_files = [f for f in files if "MPHC2" in f]
@@ -194,7 +199,7 @@ def makeGraph(year, site_choice):
         y=650,
         font=dict(size = 17),
         showarrow=False)
-    
+
     data = [dict(type='line',
                  line=dict(color='#8ad88d',
                            width=2,
@@ -553,7 +558,7 @@ def displaySD2(sd):
 
 
 
-# In[] 
+# In[]
 
 if __name__ == '__main__':
-    app.run_server()
+    app.run_server(host='0.0.0.0')

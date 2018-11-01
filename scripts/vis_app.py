@@ -205,7 +205,7 @@ app.layout = html.Div([
                                     'margin-right': '10',
                                     'margin-left': '150'},
                              children=[
-                                     html.P('S.D.'),
+                                     html.P('The Hoped For "Skill" Meter'),
                                      html.P(id='sd_output'),
                                      dcc.Slider(id='sd',
                                                 min=0,
@@ -216,23 +216,6 @@ app.layout = html.Div([
                                                 # vertical=True,
                                                 marks={0: {'label': '0'},
                                                        25: {'label': '25'}})]),
-
-                         # html.Div(
-                         #     className="three columns",
-                         #     style={'height': '200',
-                         #            'margin-right': '10'},
-                         #     children=[
-                         #             html.P('S.D. 2'),
-                         #             html.P(id='sd_output2'),
-                         #             dcc.Slider(id='sd2',
-                         #                        min=0,
-                         #                        max=25,
-                         #                        step=1,
-                         #                        value=0,
-                         #                        updatemode='drag',
-                         #                        vertical=True,
-                         #                        marks={0: {'label': '0'},
-                         #                               25: {'label': '25'}})])
                        ]),
         html.Hr(),
         ])  # *END
@@ -267,7 +250,7 @@ def makeGraph(year, site_choice):
         text="<b>Forecast Variance: " + "{:,}".format(var) + "</b>",
         x=year + '-06-25',
         y=y_scales[site_choice] * .9,
-        font=dict(size = 17),
+        font=dict(size=17),
         showarrow=False)
 
     data = [dict(type='line',
@@ -606,7 +589,7 @@ def makeGraph7(year, site_choice, sd):
             #   x=forecast.Date,
             #   y=forecast['Forecast'].iloc[0],
             #   name='Observation')
-              ]
+           ]
 
     layout_c = copy.deepcopy(layout)
     layout_c['dragmode'] = 'select'

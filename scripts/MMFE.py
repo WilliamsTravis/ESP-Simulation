@@ -33,6 +33,11 @@ def plttr(data):
     plt.figure()
     plt.plot(range(len(data)), data)
     plt.show()
+    
+def scttr(x, y):
+    plt.figure()
+    plt.scatter(x, y)
+    plt.show()
 
 
 def vT(vector):
@@ -70,12 +75,12 @@ Cp = 1 - (np.nanvar(fs) / np.var(qs_i))   # Voila a measure of skill! 0.84
 # Inversely, this is the variance assoication with a lower skill score: .75
 var_fs = (1 - .75) * np.var(qs_i)
 
+
 # These forecast errors are assumed to have these four qualities:
 # 1: They sum up to zero
 # 2: They are Gaussian (An assumption of the model, at least)
 # 3: They are temporally independent
 # 4: They are stationary, they do not change with the number of total steps
-
 # There are missing forecasts
 for i in range(len(fs)):
     if np.isnan(fs[i]):
@@ -99,9 +104,9 @@ plttr(steps)
 # it with the variance-covariance matrix.
 plt.hist(x=steps, bins='auto')  # (It's not really normal)
 
-# This is the variance covariance matrix of the improvements
+# This is the variance covariance matrix of the improvements...i think
 vcv = (steps*vT(steps))/len(steps)
-
+np.diagonal(vcv)
 # We cannot decompose this with the Cholesky Decomposition...negatives :/
 
 # What if we did this:

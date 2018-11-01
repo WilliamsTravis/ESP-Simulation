@@ -18,9 +18,9 @@ if 'scripts' not in sys.path:
 os.chdir('c:\\users\\user\\github\\ESP_simulation')  # How to generalize this?
 
 # In[]
-# The McPhee Reservoir and entry point at Dolores - forecasts and observations
+# Forecasts and observations from sample forecast sites
 # In thousand acre feet
-sites = ['MPHC2', 'DOLC2']
+sites = ['MPHC2', 'DOLC2', 'CAMC2']  # add site abbr. to get new data
 urls = [["https://www.cbrfc.noaa.gov/wsup/graph/espplot_data.py?id=" +
          site + "&year=" + str(y) +
          "&bper=7&eper=10&qpf=0&quantiles=1&observed=1&average=1" for
@@ -47,12 +47,11 @@ for i in range(len(dfs)):
     dfs[i].to_csv("data\\" + filename + ".csv", index=False)
 
 
-
 # In[] Historical Volumes for MPHC2 and DOLC2
-sites = ['MPHC2', 'DOLC2']
-urls = ["https://www.cbrfc.noaa.gov/rmap/wsup/point.php?rfc=cbrfc&id=" + site +
-        "&wyear=2017&mode=obs&qpf=0&showesp=1&showunapp=0&showoff=1&showobs=1&"\
-        "showmm=1&showhvol=0&mode=historical" for site in sites]
+urls = ["https://www.cbrfc.noaa.gov/rmap/wsup/point.php?rfc=cbrfc&id=" +
+        site +
+        "&wyear=2017&mode=obs&qpf=0&showesp=1&showunapp=0&showoff=1&" +
+        "showobs=1&showmm=1&showhvol=0&mode=historical" for site in sites]
 labels = [site + "_historical" for site in sites]
 
 for i in range(len(urls)):

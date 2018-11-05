@@ -28,12 +28,22 @@ os.chdir("C:/users/user/github/esp_simulation")
 
 
 # In[] Helper functions
-def plttr(data):
+def plttr(data, target_line=False):
     '''works for vectors'''
+    if target_line:
+        if str(type(data)) == "<class 'numpy.ndarray'>":
+            target = data[-1]
+        else:
+            target = data.iloc[-1]
+    else:
+        target = None
+    target_line = np.repeat(target, len(data))
     plt.figure()
     plt.plot(range(len(data)), data)
+    plt.plot(range(len(data)), target_line)
     plt.show()
-    
+
+
 def scttr(x, y):
     plt.figure()
     plt.scatter(x, y)
@@ -61,12 +71,14 @@ df = dfs['2017']
 
 # These are the forecasts that the sample made
 fs = np.array(df['ESP 50'])
+plttr(fs, target_line=True)
 
 # To quantify skill we need a measure of observed streamflow variability.
 # In our case, the variability of a single year's streamflow would be
 # misleading. Variability of ultimate summer q across all years is perhaps
 # more appropriate
 qs_i = history['vol']
+plttr(qs_i)
 
 # According to "Forecast-skill-based simulations of streamflow forecasts",
 # skill (Coefficient of Prediction (Cp)) is described as this:
@@ -104,13 +116,23 @@ plttr(steps)
 # it with the variance-covariance matrix.
 plt.hist(x=steps, bins='auto')  # (It's not really normal)
 
-# This is the variance covariance matrix of the improvements...i think
-vcv = (steps*vT(steps))/len(steps)
+# This is where we  create the variance covariance matrix of improvements
+vcv = (steps * vT(steps))/len(steps)
+vcv = np.matmul(vT(steps), np.matrix(steps))/len(steps)
 np.diagonal(vcv)
+
 # We cannot decompose this with the Cholesky Decomposition...negatives :/
+# There must not be any negative eigenvalues
+eigens = np.linalg.eig(vcv)
+(eigens[0] > 0).all()  # Shoot, darn
+
+# This won't work then
+np.linalg.cholesky(vcv)
 
 # What if we did this:
-
+variations = [list(steps[:i]) for i in range(2, len(steps))]
+vrs = np.array([np.var(v) for v in variations])
+plttr(vrs)
 
 def simForecast(forecast):
     '''
@@ -142,17 +164,17 @@ def simForecast(forecast):
     plttr(sds)
 
     # 3: And use this to simulate improvements in errors
-    simprovements = np.array([np.random.normal(0, sd) for sd in sds])          # here we could reduce each sd by a parameter?
+    simprovements = np.array([np.random.normal(0, sd) for sd in sds])
     plttr(simprovements)
- 
+
     # While the errors themselves are a random walk toward the final?
 
-    # 4: We choose a starting number, a random one with a certain range around q
-    pct = .5 # so the number would fall with +- 50% of ultimate q (parameter)
+    # 4: Choose a starting number, a random one with a certain range around q
+    pct = .5  # so the number would fall with +- 50% of ultimate q (parameter)
     low = 1 - pct
     high = 1 + pct
     start = random.uniform(q * low, q * high)
-    
+
     # 5: We get our initial error
     e1 = start - q
 
@@ -169,18 +191,9 @@ def simForecast(forecast):
     # Plot
     plttr(forecast)
     plttr(fsim)
-    return fsim
-
+    # return fsim
 
 fsim = simForecast(fs)
-
-
-
-
-
-
-
-
 
 
 # In[] Stuff for later sorry
@@ -203,14 +216,11 @@ simerrs = [np.random.normal(0, sterr) for sterr in sterrs]
 plttr(simerrs)
 
 
-# ... 
-
+# ...
 
 
 # At this point we create a the vcv matrix, but it's not making sense to me...
 # switching to Zhao & Zhao (2014)
-
-# It turns out not to be as simple, let's try it step by step
 vrs_t = np.array(np.matrix(vrs).T)
 vcv = (vrs * vrs_t)/len(vrs)
 
@@ -245,17 +255,10 @@ variations = [list(errors[:i]) for i in range(2, len(errors))]
 vrs = np.array([np.var(v) for v in variations])
 plttr(vrs)
 
-# this could also be calculated as a row matrix mutliplied by it's transpose...
+# this could also be calculated as a row matrix mutliplied by it's transpose?
 # vcv = vrs * np.array([[v] for v in vrs]) # or np.matrix(vrs).T # this is probzbly wrong
 # vcv = vcv / len(vrs)
 # vcv = np.cov(vrs, rowvar=False)
-
-
-
-
-
-
-
 
 plttr(vcv)  # similar shape as the cumulative variations.
 (np.sqrt(np.diagonal(vcv)) == vrs).all()

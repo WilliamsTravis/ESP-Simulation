@@ -20,7 +20,7 @@ os.chdir('c:\\users\\user\\github\\ESP_simulation')  # How to generalize this?
 # In[]
 # Forecasts and observations from sample forecast sites
 # In thousand acre feet
-sites = ['MPHC2', 'DOLC2', 'CAMC2']  # add site abbr. to get new data
+sites = ['MPHC2', 'DOLC2', 'CAMC2', 'DOLU1']  # add site abbr. to get new data
 urls = [["https://www.cbrfc.noaa.gov/wsup/graph/espplot_data.py?id=" +
          site + "&year=" + str(y) +
          "&bper=7&eper=10&qpf=0&quantiles=1&observed=1&average=1" for
